@@ -176,13 +176,13 @@ recoveryButton.addEventListener('click', async () => {
   setMessage(loginMessage, 'Enviando enlace de recuperacion...');
 
   try {
-    await apiFetch('/auth/v1/recover', {
+    const redirectTo = `${window.location.origin}/restablecer-contrasena`;
+    const recoverPath = `/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`;
+
+    await apiFetch(recoverPath, {
       method: 'POST',
       headers: headers(false),
-      body: JSON.stringify({
-        email,
-        redirect_to: `${window.location.origin}/restablecer-contrasena`,
-      }),
+      body: JSON.stringify({ email }),
     });
 
     setMessage(loginMessage, 'Revisa el correo. El enlace abrira la pantalla para cambiar contrasena.', 'success');
