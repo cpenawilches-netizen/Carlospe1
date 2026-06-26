@@ -66,6 +66,9 @@ const footwearTypes = [
     ],
   },
 ];
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 ---
 
 <!doctype html>
@@ -140,7 +143,12 @@ const footwearTypes = [
           <h2>Elige el calzado que necesita tu trabajo</h2>
         </div>
 
-        <div class="type-tabs">
+        <div
+          class="type-tabs"
+          id="catalogo-calzado"
+          data-supabase-url={supabaseUrl}
+          data-supabase-anon-key={supabaseAnonKey}
+        >
           {footwearTypes.map((type, index) => (
             <input
               class="tab-input"
@@ -220,5 +228,140 @@ const footwearTypes = [
         <a class="button primary" href="mailto:ventas@tumarca.com">ventas@tumarca.com</a>
       </section>
     </main>
+
+    <script>
+      const catalog = document.querySelector('#catalogo-calzado');
+      const supabaseUrl = catalog?.dataset.supabaseUrl;
+      const supabaseAnonKey = catalog?.dataset.supabaseAnonKey;
+
+      const formatPrice = (value) => {
+        if (value === null || value === undefined || value === '') {
+          return 'Cotizar';
+        }
+
+        return new Intl.NumberFormat('es-CO', {
+          style: 'currency',
+          currency: 'COP',
+          maximumFractionDigits: 0,
+        }).format(Number(value));
+      };
+
+      const renderCatalog = (types) => {
+        if (!catalog || !types.length) return;
+
+        catalog.innerHTML = `
+          <div class="tab-list" role="tablist" aria-label="Tipos de calzado">
+            ${types
+              .map(
+                (type, index) => `
+                  <button
+                    class="tab-label ${index === 0 ? 'is-active' : ''}"
+                    type="button"
+                    data-tab-target="${type.slug}"
+                  >
+                    ${type.nombre}
+                  </button>
+                `,
+              )
+              .join('')}
+          </div>
+
+          <div class="type-panels">
+            ${types
+              .map(
+                (type, index) => `
+                  <article class="type-panel ${index === 0 ? 'is-active' : ''}" data-tab-panel="${type.slug}">
+                    <div class="type-intro">
+                      <h3>${type.nombre}</h3>
+                      <p>${type.descripcion ?? ''}</p>
+                      <a class="text-link" href="#contacto">Cotizar este tipo</a>
+                    </div>
+                    <div class="product-grid compact">
+                      ${type.productos
+                        .map(
+                          (product) => `
+                            <article class="product-card">
+                              <div class="shoe-visual" aria-hidden="true">
+                                ${
+                                  product.imagen_url
+                                    ? `<img src="${product.imagen_url}" alt="${product.nombre}" loading="lazy" />`
+                                    : '<span></span>'
+                                }
+                              </div>
+                              <div class="product-meta">
+                                <span>${product.etiqueta ?? 'Producto'}</span>
+                                <h3>${product.nombre}</h3>
+                                <p>${product.color ?? ''}</p>
+                                <p>${product.descripcion ?? ''}</p>
+                                <strong>${formatPrice(product.precio)}</strong>
+                              </div>
+                            </article>
+                          `,
+                        )
+                        .join('')}
+                    </div>
+                  </article>
+                `,
+              )
+              .join('')}
+          </div>
+        `;
+
+        catalog.querySelectorAll('[data-tab-target]').forEach((tab) => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-tab-target');
+
+            catalog.querySelectorAll('[data-tab-target]').forEach((item) => {
+              item.classList.toggle('is-active', item === tab);
+            });
+
+            catalog.querySelectorAll('[data-tab-panel]').forEach((panel) => {
+              panel.classList.toggle('is-active', panel.getAttribute('data-tab-panel') === target);
+            });
+          });
+        });
+      };
+
+      const loadCatalogFromSupabase = async () => {
+        if (
+          !catalog ||
+          !supabaseUrl ||
+          !supabaseAnonKey ||
+          supabaseUrl === 'undefined' ||
+          supabaseAnonKey === 'undefined'
+        ) {
+          return;
+        }
+
+        const url = new URL('/rest/v1/tipos_calzado', supabaseUrl);
+        url.searchParams.set('select', 'id,nombre,slug,descripcion,orden,productos(*)');
+        url.searchParams.set('activo', 'eq.true');
+        url.searchParams.set('productos.disponible', 'eq.true');
+        url.searchParams.set('order', 'orden.asc');
+
+        const response = await fetch(url, {
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('No se pudo cargar el catalogo desde Supabase');
+        }
+
+        const types = await response.json();
+        const orderedTypes = types.map((type) => ({
+          ...type,
+          productos: [...(type.productos ?? [])].sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)),
+        }));
+
+        renderCatalog(orderedTypes);
+      };
+
+      loadCatalogFromSupabase().catch((error) => {
+        console.warn(error);
+      });
+    </script>
   </body>
 </html>
