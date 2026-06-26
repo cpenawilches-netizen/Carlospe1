@@ -1,0 +1,141 @@
+---
+import '../styles/global.css';
+
+const categories = [
+  { name: 'Mujer', detail: 'Sneakers, sandalias y botas para todos los dias' },
+  { name: 'Hombre', detail: 'Casual, deportivo y cuero con horma comoda' },
+  { name: 'Ninos', detail: 'Modelos resistentes para colegio y juego' },
+  { name: 'Trabajo', detail: 'Botas, seguridad y suelas de alto agarre' },
+];
+
+const products = [
+  { name: 'Runner Urbana', tag: 'Nuevo', price: '$189.900', color: 'Negro / rojo' },
+  { name: 'Cuero Diario', tag: 'Top venta', price: '$229.900', color: 'Miel' },
+  { name: 'Bota Terreno', tag: 'Trabajo', price: '$269.900', color: 'Cafe' },
+  { name: 'Sandalia Fresh', tag: 'Oferta', price: '$99.900', color: 'Verde oliva' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Tienda colombiana de calzado para mujer, hombre, ninos y trabajo."
+    />
+    <title>Zapateria Local | Calzado para todos los dias</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Inicio">
+        <span class="brand-mark">Z</span>
+        <span>Zapateria Local</span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#categorias">Categorias</a>
+        <a href="#productos">Productos</a>
+        <a href="#ventajas">Ventajas</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="nav-action" href="#productos">Comprar</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <img src="/images/hero-calzado.png" alt="Coleccion de zapatos en exhibicion comercial" />
+        <div class="hero-overlay">
+          <p class="eyebrow">Coleccion 2026</p>
+          <h1>Calzado para caminar, trabajar y moverse mejor.</h1>
+          <p>
+            Una vitrina moderna para vender tenis, cuero, botas y sandalias con despacho en
+            Colombia.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#productos">Ver destacados</a>
+            <a class="button secondary" href="#contacto">Cotizar pedido</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="promo-strip" aria-label="Beneficios">
+        <span>Envios nacionales</span>
+        <span>Cambios faciles</span>
+        <span>Pagos seguros</span>
+        <span>Asesoria por WhatsApp</span>
+      </section>
+
+      <section id="categorias" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Compra por categoria</p>
+          <h2>Una entrada clara para cada cliente</h2>
+        </div>
+        <div class="category-grid">
+          {categories.map((category) => (
+            <article class="category-card">
+              <h3>{category.name}</h3>
+              <p>{category.detail}</p>
+              <a href="#productos">Explorar</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="productos" class="section product-section">
+        <div class="section-heading">
+          <p class="eyebrow">Vitrina inicial</p>
+          <h2>Productos destacados</h2>
+        </div>
+        <div class="product-grid">
+          {products.map((product) => (
+            <article class="product-card">
+              <div class="shoe-visual" aria-hidden="true">
+                <span></span>
+              </div>
+              <div class="product-meta">
+                <span>{product.tag}</span>
+                <h3>{product.name}</h3>
+                <p>{product.color}</p>
+                <strong>{product.price}</strong>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="ventajas" class="feature-band">
+        <div>
+          <p class="eyebrow">Pensado para ecommerce</p>
+          <h2>Rapido, editable y listo para crecer</h2>
+        </div>
+        <div class="features">
+          <article>
+            <h3>Astro</h3>
+            <p>Paginas rapidas, buen SEO y componentes faciles de mantener.</p>
+          </article>
+          <article>
+            <h3>GitHub</h3>
+            <p>Control de cambios para trabajar desde VS Code sin perder historial.</p>
+          </article>
+          <article>
+            <h3>Cloudflare</h3>
+            <p>Deploy automatico cada vez que se sube una mejora al repositorio.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="contacto" class="contact-section">
+        <div>
+          <p class="eyebrow">Siguiente paso</p>
+          <h2>Conectemos catalogo, pagos y WhatsApp</h2>
+          <p>
+            Esta primera version deja la base visual lista. Luego podemos agregar productos reales,
+            filtros, carrito, CMS o integracion con inventario.
+          </p>
+        </div>
+        <a class="button primary" href="mailto:ventas@tumarca.com">ventas@tumarca.com</a>
+      </section>
+    </main>
+  </body>
+</html>
