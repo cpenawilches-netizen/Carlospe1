@@ -137,17 +137,19 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
   <body>
     <header class="topbar">
       <nav class="category-menu" aria-label="Categorias de calzado">
-        {categories.map((category) => (
-          <div class="menu-item">
-            <a class="menu-trigger" href="#productos">{category.name}</a>
-            <div class="submenu">
+        <div class="menu-item">
+          <a class="menu-trigger" href="#productos">Productos</a>
+          <div class="submenu product-submenu">
+            {categories.map((category) => (
+              <div class="submenu-group">
               <p>{category.name}</p>
               {category.items.map((item) => (
                 <a href="#productos">{item}</a>
               ))}
-            </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </nav>
       <a class="brand" href="/" aria-label="Inicio">
         <img src="/images/induprot-logo.png" alt="InduProt" />
@@ -173,6 +175,27 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
             <a class="button primary" href="#productos">Ver destacados</a>
             <a class="button secondary" href="#contacto">Cotizar pedido</a>
           </div>
+        </div>
+        <div class="hero-quick-actions" aria-label="Accesos rapidos">
+          <a href="#productos" aria-label="Buscar productos">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m16.5 16.5 4 4"></path>
+            </svg>
+          </a>
+          <a href="/configurador" aria-label="Mi cuenta">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 21a8 8 0 0 0-16 0"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+          <a href="#contacto" aria-label="Carrito de compra">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L22 6H6"></path>
+            </svg>
+          </a>
         </div>
       </section>
 
