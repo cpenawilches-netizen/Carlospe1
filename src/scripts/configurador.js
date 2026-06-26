@@ -9,6 +9,7 @@ const loginMessage = document.querySelector('#login-message');
 const productMessage = document.querySelector('#product-message');
 const logoutButton = document.querySelector('.admin-logout');
 const refreshButton = document.querySelector('#refresh-products');
+const recoveryButton = document.querySelector('#send-recovery-link');
 
 let session = JSON.parse(localStorage.getItem('induprot_session') || 'null');
 
@@ -160,6 +161,37 @@ loginForm.addEventListener('submit', async (event) => {
     session = null;
     showLogin();
     setMessage(loginMessage, 'No se pudo iniciar sesion. Revisa el correo y la contrasena.', 'error');
+    console.error(error);
+  }
+});
+
+recoveryButton.addEventListener('click', async () => {
+  const email = loginForm.elements.email.value.trim();
+
+  if (!email) {
+    setMessage(loginMessage, 'Escribe el correo primero.', 'error');
+    return;
+  }
+
+  setMessage(loginMessage, 'Enviando enlace de recuperacion...');
+
+  try {
+    await apiFetch('/auth/v1/recover', {
+      method: 'POST',
+      headers: headers(false),
+      body: JSON.stringify({
+        email,
+        redirect_to: `${window.location.origin}/restablecer-contrasena`,
+      }),
+    });
+
+    setMessage(loginMessage, 'Revisa el correo. El enlace abrira la pantalla para cambiar contrasena.', 'success');
+  } catch (error) {
+    setMessage(
+      loginMessage,
+      'No se pudo enviar. Si sale limite de correos, espera unos minutos e intenta de nuevo.',
+      'error',
+    );
     console.error(error);
   }
 });

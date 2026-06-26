@@ -53,6 +53,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
             <input type="password" name="password" autocomplete="current-password" required />
           </label>
           <button class="button primary" type="submit">Entrar</button>
+          <button class="text-button" id="send-recovery-link" type="button">
+            Enviar enlace para cambiar contrasena
+          </button>
           <p class="form-message" id="login-message"></p>
         </form>
 

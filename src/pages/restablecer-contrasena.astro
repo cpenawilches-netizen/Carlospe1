@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Restablecer contrasena | InduProt</title>
+    <link rel="icon" type="image/png" href="/images/induprot-icon.png" />
+  </head>
+  <body class="admin-page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Inicio">
+        <img src="/images/induprot-logo.png" alt="InduProt" />
+      </a>
+      <div class="topbar-actions">
+        <a href="/configurador">Configurador</a>
+        <a class="nav-action" href="/">Ver web</a>
+      </div>
+    </header>
+
+    <main
+      class="auth-shell"
+      id="reset-password-app"
+      data-supabase-url={supabaseUrl}
+      data-supabase-anon-key={supabaseAnonKey}
+    >
+      <form class="admin-card auth-card" id="reset-password-form">
+        <div>
+          <p class="eyebrow">Acceso admin</p>
+          <h1>Crear nueva contrasena</h1>
+        </div>
+        <p class="auth-copy">
+          Escribe la nueva contrasena del usuario administrador. Esta pantalla solo funciona cuando
+          entras desde el enlace que Supabase envia al correo.
+        </p>
+        <label>
+          Nueva contrasena
+          <input
+            type="password"
+            name="password"
+            autocomplete="new-password"
+            minlength="8"
+            required
+          />
+        </label>
+        <label>
+          Confirmar contrasena
+          <input
+            type="password"
+            name="confirm_password"
+            autocomplete="new-password"
+            minlength="8"
+            required
+          />
+        </label>
+        <button class="button primary" type="submit">Guardar nueva contrasena</button>
+        <p class="form-message" id="reset-password-message"></p>
+      </form>
+    </main>
+
+    <script>
+      import '../scripts/restablecer-contrasena.js';
+    </script>
+  </body>
+</html>
