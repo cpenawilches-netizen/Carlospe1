@@ -207,7 +207,7 @@ label {
 
 .inventory-item {
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr) auto;
+  grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 12px;
@@ -257,6 +257,36 @@ label {
   color: var(--green);
   font-size: 0.8rem;
   font-weight: 900;
+}
+
+.muted-pill {
+  background: rgba(184, 130, 76, 0.16);
+  color: #7c4d1e;
+}
+
+.inventory-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-left: 90px;
+}
+
+.compact-button {
+  min-height: 36px;
+  padding-inline: 12px;
+  font-size: 0.86rem;
+}
+
+.danger-link {
+  color: var(--red);
+}
+
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .topbar {
@@ -409,6 +439,34 @@ label {
   font-size: 0.88rem;
 }
 
+.top-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: var(--ink);
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.top-icon:hover,
+.top-icon:focus-visible {
+  color: var(--red);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.top-icon svg {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.9;
+}
+
 .nav-action,
 .button {
   display: inline-flex;
@@ -494,44 +552,6 @@ label {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
-}
-
-.hero-quick-actions {
-  position: absolute;
-  top: 50%;
-  right: clamp(18px, 4vw, 64px);
-  z-index: 2;
-  display: grid;
-  gap: 22px;
-  transform: translateY(-50%);
-}
-
-.hero-quick-actions a {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  color: var(--white);
-  transition:
-    color 160ms ease,
-    transform 160ms ease;
-}
-
-.hero-quick-actions a:hover,
-.hero-quick-actions a:focus-visible {
-  color: var(--red);
-  outline: none;
-  transform: translateX(-3px);
-}
-
-.hero-quick-actions svg {
-  width: 38px;
-  height: 38px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.9;
 }
 
 .button.secondary {
@@ -804,10 +824,6 @@ label {
     justify-self: start;
   }
 
-  .hero-quick-actions {
-    right: 18px;
-  }
-
   .category-grid,
   .product-grid,
   .type-panel,
@@ -855,23 +871,14 @@ label {
     font-size: 2.9rem;
   }
 
-  .hero-quick-actions {
-    top: auto;
-    right: 18px;
-    bottom: 22px;
-    display: flex;
-    gap: 14px;
-    transform: none;
+  .top-icon {
+    width: 34px;
+    height: 34px;
   }
 
-  .hero-quick-actions a {
-    width: 36px;
-    height: 36px;
-  }
-
-  .hero-quick-actions svg {
-    width: 32px;
-    height: 32px;
+  .top-icon svg {
+    width: 27px;
+    height: 27px;
   }
 
   .promo-strip,
@@ -899,6 +906,10 @@ label {
 
   .inventory-item {
     grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .inventory-actions {
+    padding-left: 0;
   }
 
   .inventory-thumb {
