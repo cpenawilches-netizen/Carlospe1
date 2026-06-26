@@ -155,9 +155,25 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         <img src="/images/induprot-logo.png" alt="InduProt" />
       </a>
       <div class="topbar-actions">
-        <a href="#ventajas">Ventajas</a>
-        <a href="#contacto">Contacto</a>
-        <a class="nav-action" href="#productos">Comprar</a>
+        <a class="top-icon" href="#productos" aria-label="Buscar productos">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m16.5 16.5 4 4"></path>
+          </svg>
+        </a>
+        <a class="top-icon" href="/configurador" aria-label="Mi cuenta">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 21a8 8 0 0 0-16 0"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+        <a class="top-icon" href="#contacto" aria-label="Carrito de compra">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L22 6H6"></path>
+          </svg>
+        </a>
       </div>
     </header>
 
@@ -175,27 +191,6 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
             <a class="button primary" href="#productos">Ver destacados</a>
             <a class="button secondary" href="#contacto">Cotizar pedido</a>
           </div>
-        </div>
-        <div class="hero-quick-actions" aria-label="Accesos rapidos">
-          <a href="#productos" aria-label="Buscar productos">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7"></circle>
-              <path d="m16.5 16.5 4 4"></path>
-            </svg>
-          </a>
-          <a href="/configurador" aria-label="Mi cuenta">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20 21a8 8 0 0 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </a>
-          <a href="#contacto" aria-label="Carrito de compra">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L22 6H6"></path>
-            </svg>
-          </a>
         </div>
       </section>
 

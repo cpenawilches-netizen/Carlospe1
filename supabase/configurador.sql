@@ -36,6 +36,12 @@ to authenticated
 using (true)
 with check (true);
 
+drop policy if exists "Authenticated delete productos" on productos;
+create policy "Authenticated delete productos"
+on productos for delete
+to authenticated
+using (true);
+
 insert into storage.buckets (id, name, public)
 values ('productos', 'productos', true)
 on conflict (id) do update set public = true;

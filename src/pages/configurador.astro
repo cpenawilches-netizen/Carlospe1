@@ -60,7 +60,14 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         </form>
 
         <form class="admin-card product-form" id="product-form" hidden>
-          <h2>Nuevo producto</h2>
+          <div class="inventory-heading">
+            <h2 id="product-form-title">Nuevo producto</h2>
+            <button class="button secondary compact-button" type="button" id="cancel-edit" hidden>
+              Cancelar edicion
+            </button>
+          </div>
+          <input name="id" type="hidden" />
+          <input name="imagen_url_actual" type="hidden" />
           <div class="form-row">
             <label>
               Tipo de calzado
@@ -97,7 +104,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
             <label><input name="disponible" type="checkbox" checked /> Disponible</label>
             <label><input name="destacado" type="checkbox" /> Destacado</label>
           </div>
-          <button class="button primary" type="submit">Guardar producto</button>
+          <button class="button primary" type="submit" id="product-submit">Guardar producto</button>
           <p class="form-message" id="product-message"></p>
         </form>
 
