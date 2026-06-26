@@ -1,5 +1,6 @@
 const app = document.querySelector('#inventory-app');
-const supabaseUrl = app?.dataset.supabaseUrl;
+const cleanSupabaseUrl = (value) => value?.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+const supabaseUrl = cleanSupabaseUrl(app?.dataset.supabaseUrl);
 const supabaseAnonKey = app?.dataset.supabaseAnonKey;
 const loginForm = document.querySelector('#login-form');
 const productForm = document.querySelector('#product-form');

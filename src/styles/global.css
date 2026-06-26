@@ -294,6 +294,13 @@ label {
   height: auto;
 }
 
+.topbar > nav {
+  justify-content: center;
+  gap: clamp(14px, 3vw, 30px);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .category-menu {
   position: relative;
   display: flex;

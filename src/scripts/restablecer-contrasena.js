@@ -1,7 +1,8 @@
 const app = document.querySelector('#reset-password-app');
 const form = document.querySelector('#reset-password-form');
 const message = document.querySelector('#reset-password-message');
-const supabaseUrl = app?.dataset.supabaseUrl;
+const cleanSupabaseUrl = (value) => value?.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+const supabaseUrl = cleanSupabaseUrl(app?.dataset.supabaseUrl);
 const supabaseAnonKey = app?.dataset.supabaseAnonKey;
 
 const setMessage = (text, type = '') => {
