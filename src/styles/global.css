@@ -255,6 +255,85 @@ a {
   background: var(--white);
 }
 
+.type-tabs {
+  position: relative;
+}
+
+.tab-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.tab-label:hover {
+  color: var(--ink);
+}
+
+.type-panel {
+  display: none;
+  grid-template-columns: minmax(240px, 0.38fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.tab-input:nth-of-type(1):checked ~ .tab-list .tab-label:nth-child(1),
+.tab-input:nth-of-type(2):checked ~ .tab-list .tab-label:nth-child(2) {
+  background: var(--ink);
+  color: var(--white);
+  border-color: var(--ink);
+}
+
+.tab-input:nth-of-type(1):checked ~ .type-panels .type-panel:nth-child(1),
+.tab-input:nth-of-type(2):checked ~ .type-panels .type-panel:nth-child(2) {
+  display: grid;
+}
+
+.type-intro {
+  display: grid;
+  align-content: space-between;
+  min-height: 100%;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f4f5f1;
+}
+
+.type-intro h3 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  line-height: 1;
+}
+
+.type-intro p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.text-link {
+  color: var(--red);
+  font-weight: 900;
+}
+
 .product-card {
   overflow: hidden;
 }
@@ -292,6 +371,10 @@ a {
 
 .product-meta strong {
   font-size: 1.2rem;
+}
+
+.product-grid.compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .feature-band {
@@ -339,14 +422,20 @@ a {
 
   .category-grid,
   .product-grid,
+  .type-panel,
   .feature-band,
   .contact-section {
     grid-template-columns: 1fr 1fr;
   }
 
   .feature-band > div:first-child,
+  .type-intro,
   .contact-section > div {
     grid-column: 1 / -1;
+  }
+
+  .product-grid.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -382,8 +471,24 @@ a {
 
   .category-grid,
   .product-grid,
+  .type-panel,
   .feature-band,
   .contact-section {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 0;
+  }
+
+  .tab-label {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .product-grid.compact {
     grid-template-columns: 1fr;
   }
 
