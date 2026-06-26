@@ -187,11 +187,7 @@ recoveryButton.addEventListener('click', async () => {
 
     setMessage(loginMessage, 'Revisa el correo. El enlace abrira la pantalla para cambiar contrasena.', 'success');
   } catch (error) {
-    setMessage(
-      loginMessage,
-      'No se pudo enviar. Si sale limite de correos, espera unos minutos e intenta de nuevo.',
-      'error',
-    );
+    setMessage(loginMessage, `No se pudo enviar: ${error.message}`, 'error');
     console.error(error);
   }
 });
