@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Configurador | InduProt</title>
+    <link rel="icon" type="image/png" href="/images/induprot-icon.png" />
+  </head>
+  <body class="admin-page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Inicio">
+        <img src="/images/induprot-logo.png" alt="InduProt" />
+      </a>
+      <nav aria-label="Principal">
+        <a href="/">Sitio</a>
+        <a href="/#productos">Catalogo</a>
+        <a href="/#contacto">Contacto</a>
+      </nav>
+      <a class="nav-action" href="/">Ver web</a>
+    </header>
+
+    <main
+      class="admin-shell"
+      id="inventory-app"
+      data-supabase-url={supabaseUrl}
+      data-supabase-anon-key={supabaseAnonKey}
+    >
+      <section class="admin-header">
+        <div>
+          <p class="eyebrow">Inventario</p>
+          <h1>Configurador de productos</h1>
+        </div>
+        <button class="button secondary admin-logout" type="button" hidden>Cerrar sesion</button>
+      </section>
+
+      <section class="admin-grid">
+        <form class="admin-card admin-login" id="login-form">
+          <h2>Acceso</h2>
+          <label>
+            Correo
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            Contrasena
+            <input type="password" name="password" autocomplete="current-password" required />
+          </label>
+          <button class="button primary" type="submit">Entrar</button>
+          <p class="form-message" id="login-message"></p>
+        </form>
+
+        <form class="admin-card product-form" id="product-form" hidden>
+          <h2>Nuevo producto</h2>
+          <div class="form-row">
+            <label>
+              Tipo de calzado
+              <select name="tipo_calzado_id" required></select>
+            </label>
+            <label>
+              Etiqueta
+              <input name="etiqueta" placeholder="Puntera, Campo, Oferta" />
+            </label>
+          </div>
+          <label>
+            Nombre del producto
+            <input name="nombre" required />
+          </label>
+          <label>
+            Descripcion
+            <textarea name="descripcion" rows="3"></textarea>
+          </label>
+          <div class="form-row">
+            <label>
+              Precio
+              <input name="precio" type="number" min="0" step="100" />
+            </label>
+            <label>
+              Color
+              <input name="color" />
+            </label>
+          </div>
+          <label>
+            Imagen
+            <input name="imagen" type="file" accept="image/png,image/jpeg,image/webp" />
+          </label>
+          <div class="form-checks">
+            <label><input name="disponible" type="checkbox" checked /> Disponible</label>
+            <label><input name="destacado" type="checkbox" /> Destacado</label>
+          </div>
+          <button class="button primary" type="submit">Guardar producto</button>
+          <p class="form-message" id="product-message"></p>
+        </form>
+
+        <section class="admin-card inventory-panel" id="inventory-panel" hidden>
+          <div class="inventory-heading">
+            <h2>Inventario cargado</h2>
+            <button class="button secondary" type="button" id="refresh-products">Actualizar</button>
+          </div>
+          <div class="inventory-list" id="inventory-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      import '../scripts/configurador.js';
+    </script>
+  </body>
+</html>
