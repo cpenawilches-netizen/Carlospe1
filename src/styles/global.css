@@ -57,19 +57,13 @@ a {
 }
 
 .brand {
-  gap: 10px;
-  font-weight: 800;
-  letter-spacing: 0;
+  width: min(190px, 42vw);
 }
 
-.brand-mark {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  background: var(--ink);
-  color: var(--white);
-  border-radius: 6px;
+.brand img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .topbar nav {
@@ -457,6 +451,10 @@ a {
 
   .brand span:last-child {
     max-width: 130px;
+  }
+
+  .brand {
+    width: min(150px, 46vw);
   }
 
   .hero::after {
