@@ -42,6 +42,13 @@ const setMessage = (element, text, type = '') => {
   element.dataset.type = type;
 };
 
+const showLogin = () => {
+  loginForm.hidden = false;
+  productForm.hidden = true;
+  inventoryPanel.hidden = true;
+  logoutButton.hidden = true;
+};
+
 const apiFetch = async (path, options = {}) => {
   const response = await fetch(`${supabaseUrl}${path}`, options);
 
@@ -149,6 +156,9 @@ loginForm.addEventListener('submit', async (event) => {
     setMessage(loginMessage, '');
     await showDashboard();
   } catch (error) {
+    localStorage.removeItem('induprot_session');
+    session = null;
+    showLogin();
     setMessage(loginMessage, 'No se pudo iniciar sesion. Revisa el correo y la contrasena.', 'error');
     console.error(error);
   }
@@ -198,10 +208,7 @@ productForm.addEventListener('submit', async (event) => {
 logoutButton.addEventListener('click', () => {
   localStorage.removeItem('induprot_session');
   session = null;
-  loginForm.hidden = false;
-  productForm.hidden = true;
-  inventoryPanel.hidden = true;
-  logoutButton.hidden = true;
+  showLogin();
 });
 
 refreshButton.addEventListener('click', () => {
@@ -214,5 +221,7 @@ if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'undefined' || supabaseA
   showDashboard().catch((error) => {
     console.error(error);
     localStorage.removeItem('induprot_session');
+    session = null;
+    showLogin();
   });
 }
