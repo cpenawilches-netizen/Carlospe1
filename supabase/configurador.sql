@@ -2,6 +2,9 @@ alter table categorias enable row level security;
 alter table tipos_calzado enable row level security;
 alter table productos enable row level security;
 
+alter table productos
+add column if not exists imagen_hover_url text;
+
 drop policy if exists "Public read categorias" on categorias;
 create policy "Public read categorias"
 on categorias for select

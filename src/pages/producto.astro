@@ -1,0 +1,133 @@
+---
+import '../styles/global.css';
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Detalle de producto InduProt" />
+    <title>Producto | InduProt</title>
+    <link rel="icon" type="image/png" href="/images/induprot-icon.png" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="back-link" href="/#productos">Volver al catalogo</a>
+      <a class="brand" href="/" aria-label="Inicio">
+        <img src="/images/induprot-logo.png" alt="InduProt" />
+      </a>
+      <a class="top-icon account-link" href="/configurador" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 21a8 8 0 0 0-16 0"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+    </header>
+
+    <main
+      class="product-detail-shell"
+      id="product-detail"
+      data-supabase-url={supabaseUrl}
+      data-supabase-anon-key={supabaseAnonKey}
+    >
+      <p class="detail-state">Cargando producto...</p>
+    </main>
+
+    <script>
+      const detail = document.querySelector('#product-detail');
+      const cleanUrl = (value) => value?.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+      const supabaseUrl = cleanUrl(detail?.dataset.supabaseUrl);
+      const supabaseAnonKey = detail?.dataset.supabaseAnonKey;
+      const slug = new URLSearchParams(window.location.search).get('slug');
+
+      const formatPrice = (value) =>
+        value === null || value === undefined
+          ? 'Solicitar cotizacion'
+          : new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP',
+              maximumFractionDigits: 0,
+            }).format(Number(value));
+
+      const renderProduct = (product) => {
+        const images = [product.imagen_url, product.imagen_hover_url].filter(Boolean);
+        document.title = `${product.nombre} | InduProt`;
+        detail.innerHTML = `
+          <section class="product-gallery" aria-label="Imagenes de ${product.nombre}">
+            <div class="thumbnail-list">
+              ${images
+                .map(
+                  (image, index) => `
+                    <button class="thumbnail-button ${index === 0 ? 'is-active' : ''}" type="button" data-image="${image}">
+                      <img src="${image}" alt="Vista ${index + 1} de ${product.nombre}" />
+                    </button>`,
+                )
+                .join('')}
+            </div>
+            <div class="main-product-image">
+              ${
+                images[0]
+                  ? `<img id="selected-product-image" src="${images[0]}" alt="${product.nombre}" />`
+                  : '<div class="image-placeholder">Imagen no disponible</div>'
+              }
+            </div>
+          </section>
+          <section class="product-information">
+            <p class="product-breadcrumb">Catalogo / ${product.tipos_calzado?.nombre ?? 'Calzado'}</p>
+            <span class="detail-tag">${product.etiqueta ?? 'InduProt'}</span>
+            <h1>${product.nombre}</h1>
+            <p class="detail-description">${product.descripcion ?? 'Calzado para trabajo y dotacion.'}</p>
+            <p class="detail-price">${formatPrice(product.precio)}</p>
+            <dl class="product-facts">
+              <div><dt>Color</dt><dd>${product.color ?? 'Consultar'}</dd></div>
+              <div><dt>Estado</dt><dd>${product.disponible ? 'Disponible' : 'No disponible'}</dd></div>
+            </dl>
+            <a class="button primary detail-cta" href="https://wa.me/?text=${encodeURIComponent(`Hola, quiero informacion sobre ${product.nombre}`)}">
+              Consultar por WhatsApp
+            </a>
+          </section>
+        `;
+
+        detail.querySelectorAll('[data-image]').forEach((button) => {
+          button.addEventListener('click', () => {
+            detail.querySelector('#selected-product-image').src = button.dataset.image;
+            detail.querySelectorAll('[data-image]').forEach((item) => {
+              item.classList.toggle('is-active', item === button);
+            });
+          });
+        });
+      };
+
+      const loadProduct = async () => {
+        if (!slug || !supabaseUrl || !supabaseAnonKey) {
+          throw new Error('No se encontro el producto solicitado.');
+        }
+
+        const url = new URL('/rest/v1/productos', supabaseUrl);
+        url.searchParams.set(
+          'select',
+          'nombre,slug,descripcion,precio,color,etiqueta,imagen_url,imagen_hover_url,disponible,tipos_calzado(nombre)',
+        );
+        url.searchParams.set('slug', `eq.${slug}`);
+        url.searchParams.set('limit', '1');
+
+        const response = await fetch(url, {
+          headers: { apikey: supabaseAnonKey, Authorization: `Bearer ${supabaseAnonKey}` },
+        });
+        if (!response.ok) throw new Error('No se pudo cargar el producto.');
+
+        const [product] = await response.json();
+        if (!product) throw new Error('Este producto no existe o no esta disponible.');
+        renderProduct(product);
+      };
+
+      loadProduct().catch((error) => {
+        detail.innerHTML = `<div class="detail-error"><h1>Producto no disponible</h1><p>${error.message}</p><a class="button primary" href="/#productos">Volver al catalogo</a></div>`;
+      });
+    </script>
+  </body>
+</html>

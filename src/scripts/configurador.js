@@ -52,6 +52,7 @@ const setEditingMode = (product = null) => {
   const isEditing = Boolean(product);
   productForm.elements.id.value = product?.id ?? '';
   productForm.elements.imagen_url_actual.value = product?.imagen_url ?? '';
+  productForm.elements.imagen_hover_url_actual.value = product?.imagen_hover_url ?? '';
   productFormTitle.textContent = isEditing ? 'Editar producto' : 'Nuevo producto';
   productSubmit.textContent = isEditing ? 'Actualizar producto' : 'Guardar producto';
   cancelEditButton.hidden = !isEditing;
@@ -110,7 +111,7 @@ const loadTypes = async () => {
 
 const loadProducts = async () => {
   const products = await apiFetch(
-    '/rest/v1/productos?select=id,tipo_calzado_id,nombre,slug,descripcion,precio,color,etiqueta,imagen_url,disponible,destacado,tipos_calzado(nombre)&order=created_at.desc',
+    '/rest/v1/productos?select=id,tipo_calzado_id,nombre,slug,descripcion,precio,color,etiqueta,imagen_url,imagen_hover_url,disponible,destacado,tipos_calzado(nombre)&order=created_at.desc',
     { headers: headers() },
   );
 
@@ -251,7 +252,8 @@ productForm.addEventListener('submit', async (event) => {
   setMessage(productMessage, isEditing ? 'Actualizando producto...' : 'Guardando producto...');
 
   try {
-    const imageUrl = await uploadImage(data.get('imagen'), slug);
+    const imageUrl = await uploadImage(data.get('imagen'), `${slug}-principal`);
+    const hoverImageUrl = await uploadImage(data.get('imagen_hover'), `${slug}-alternativa`);
     const payload = {
       tipo_calzado_id: Number(data.get('tipo_calzado_id')),
       nombre: name,
@@ -261,6 +263,7 @@ productForm.addEventListener('submit', async (event) => {
       color: data.get('color') || null,
       etiqueta: data.get('etiqueta') || null,
       imagen_url: imageUrl || data.get('imagen_url_actual') || null,
+      imagen_hover_url: hoverImageUrl || data.get('imagen_hover_url_actual') || null,
       disponible: data.get('disponible') === 'on',
       destacado: data.get('destacado') === 'on',
     };

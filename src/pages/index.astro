@@ -255,7 +255,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
                 </div>
                 <div class="product-grid compact">
                   {type.products.map((product) => (
-                    <article class="product-card">
+                    <a class="product-card" href={`/producto?slug=${type.id}-${product.name.toLowerCase().replaceAll(' ', '-')}`}>
                       <div class="shoe-visual" aria-hidden="true">
                         <span></span>
                       </div>
@@ -266,7 +266,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
                         <p>{product.spec}</p>
                         <strong>{product.price}</strong>
                       </div>
-                    </article>
+                    </a>
                   ))}
                 </div>
               </article>
@@ -360,11 +360,16 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
                       ${type.productos
                         .map(
                           (product) => `
-                            <article class="product-card">
-                              <div class="shoe-visual" aria-hidden="true">
+                            <a class="product-card" href="/producto?slug=${encodeURIComponent(product.slug)}">
+                              <div class="shoe-visual">
                                 ${
                                   product.imagen_url
-                                    ? `<img src="${product.imagen_url}" alt="${product.nombre}" loading="lazy" />`
+                                    ? `<img class="product-image primary-image" src="${product.imagen_url}" alt="${product.nombre}" loading="lazy" />
+                                      ${
+                                        product.imagen_hover_url
+                                          ? `<img class="product-image hover-image" src="${product.imagen_hover_url}" alt="Otra vista de ${product.nombre}" loading="lazy" />`
+                                          : ''
+                                      }`
                                     : '<span></span>'
                                 }
                               </div>
@@ -375,7 +380,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
                                 <p>${product.descripcion ?? ''}</p>
                                 <strong>${formatPrice(product.precio)}</strong>
                               </div>
-                            </article>
+                            </a>
                           `,
                         )
                         .join('')}

@@ -68,6 +68,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
           </div>
           <input name="id" type="hidden" />
           <input name="imagen_url_actual" type="hidden" />
+          <input name="imagen_hover_url_actual" type="hidden" />
           <div class="form-row">
             <label>
               Tipo de calzado
@@ -97,8 +98,12 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
             </label>
           </div>
           <label>
-            Imagen
+            Imagen principal
             <input name="imagen" type="file" accept="image/png,image/jpeg,image/webp" />
+          </label>
+          <label>
+            Segunda imagen (aparece al pasar el cursor)
+            <input name="imagen_hover" type="file" accept="image/png,image/jpeg,image/webp" />
           </label>
           <div class="form-checks">
             <label><input name="disponible" type="checkbox" checked /> Disponible</label>
