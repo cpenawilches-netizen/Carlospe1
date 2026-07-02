@@ -202,12 +202,31 @@ loginForm.addEventListener('submit', async (event) => {
 
     localStorage.setItem('induprot_session', JSON.stringify(session));
     setMessage(loginMessage, '');
-    await showDashboard();
   } catch (error) {
     localStorage.removeItem('induprot_session');
     session = null;
     showLogin();
-    setMessage(loginMessage, 'No se pudo iniciar sesion. Revisa el correo y la contrasena.', 'error');
+    setMessage(
+      loginMessage,
+      `No se pudo iniciar sesion: ${error.message || 'revisa el correo y la contrasena.'}`,
+      'error',
+    );
+    console.error(error);
+    return;
+  }
+
+  try {
+    await showDashboard();
+  } catch (error) {
+    productForm.hidden = true;
+    inventoryPanel.hidden = true;
+    loginForm.hidden = false;
+    logoutButton.hidden = false;
+    setMessage(
+      loginMessage,
+      `La sesion inicio correctamente, pero no se pudo cargar el inventario: ${error.message}`,
+      'error',
+    );
     console.error(error);
   }
 });
@@ -377,8 +396,14 @@ if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'undefined' || supabaseA
 } else if (session?.access_token) {
   showDashboard().catch((error) => {
     console.error(error);
-    localStorage.removeItem('induprot_session');
-    session = null;
-    showLogin();
+    productForm.hidden = true;
+    inventoryPanel.hidden = true;
+    loginForm.hidden = false;
+    logoutButton.hidden = false;
+    setMessage(
+      loginMessage,
+      `La sesion esta activa, pero no se pudo cargar el inventario: ${error.message}`,
+      'error',
+    );
   });
 }
