@@ -200,6 +200,38 @@ label {
   gap: 16px;
 }
 
+.admin-help {
+  margin: 5px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.admin-catalog-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-catalog-tab {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 850;
+}
+
+.admin-catalog-tab.is-active,
+.admin-catalog-tab:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
+}
+
 .inventory-list {
   display: grid;
   gap: 10px;
@@ -222,6 +254,7 @@ label {
 }
 
 .inventory-thumb {
+  position: relative;
   display: grid;
   width: 76px;
   height: 76px;
@@ -234,9 +267,25 @@ label {
 }
 
 .inventory-thumb img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 4px;
+  transition: opacity 180ms ease;
+}
+
+.inventory-hover-image {
+  opacity: 0;
+}
+
+.inventory-item:hover .inventory-primary-image {
+  opacity: 0;
+}
+
+.inventory-item:hover .inventory-hover-image {
+  opacity: 1;
 }
 
 .inventory-thumb span {
@@ -271,6 +320,13 @@ label {
   align-items: center;
   gap: 10px;
   padding-left: 90px;
+}
+
+.inventory-copy small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 750;
 }
 
 .compact-button {

@@ -5,6 +5,36 @@ alter table productos enable row level security;
 alter table productos
 add column if not exists imagen_hover_url text;
 
+insert into tipos_calzado (nombre, slug, descripcion, activo, orden)
+values
+  (
+    'Bota de seguridad',
+    'bota-seguridad',
+    'Proteccion industrial con puntera y suela antideslizante.',
+    true,
+    1
+  ),
+  (
+    'Bota de caucho',
+    'bota-caucho',
+    'Calzado impermeable para campo, aseo y trabajos con humedad.',
+    true,
+    2
+  ),
+  (
+    'Zueco dotacion',
+    'zueco-dotacion',
+    'Calzado comodo para cocina, salud, servicios e instituciones.',
+    true,
+    3
+  )
+on conflict (slug) do update
+set
+  nombre = excluded.nombre,
+  descripcion = excluded.descripcion,
+  activo = true,
+  orden = excluded.orden;
+
 drop policy if exists "Public read categorias" on categorias;
 create policy "Public read categorias"
 on categorias for select
@@ -66,3 +96,9 @@ on storage.objects for update
 to authenticated
 using (bucket_id = 'productos')
 with check (bucket_id = 'productos');
+
+drop policy if exists "Authenticated delete product images" on storage.objects;
+create policy "Authenticated delete product images"
+on storage.objects for delete
+to authenticated
+using (bucket_id = 'productos');

@@ -115,9 +115,13 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
         <section class="admin-card inventory-panel" id="inventory-panel" hidden>
           <div class="inventory-heading">
-            <h2>Inventario cargado</h2>
+            <div>
+              <h2>Catalogo del administrador</h2>
+              <p class="admin-help">Revisa, edita, oculta o elimina los productos sin salir del panel.</p>
+            </div>
             <button class="button secondary" type="button" id="refresh-products">Actualizar</button>
           </div>
+          <div class="admin-catalog-tabs" id="admin-catalog-tabs"></div>
           <div class="inventory-list" id="inventory-list"></div>
         </section>
       </section>

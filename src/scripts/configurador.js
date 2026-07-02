@@ -6,6 +6,7 @@ const loginForm = document.querySelector('#login-form');
 const productForm = document.querySelector('#product-form');
 const inventoryPanel = document.querySelector('#inventory-panel');
 const inventoryList = document.querySelector('#inventory-list');
+const adminCatalogTabs = document.querySelector('#admin-catalog-tabs');
 const loginMessage = document.querySelector('#login-message');
 const productMessage = document.querySelector('#product-message');
 const logoutButton = document.querySelector('.admin-logout');
@@ -17,6 +18,7 @@ const cancelEditButton = document.querySelector('#cancel-edit');
 
 let session = JSON.parse(localStorage.getItem('induprot_session') || 'null');
 let productCache = [];
+let activeCatalogType = 'todos';
 
 const headers = (authenticated = true) => ({
   apikey: supabaseAnonKey,
@@ -117,21 +119,53 @@ const loadProducts = async () => {
 
   productCache = products;
 
-  inventoryList.innerHTML = products
+  const productTypes = [...new Map(
+    products
+      .filter((product) => product.tipos_calzado?.nombre)
+      .map((product) => [String(product.tipo_calzado_id), product.tipos_calzado.nombre]),
+  ).entries()];
+
+  adminCatalogTabs.innerHTML = [
+    ['todos', 'Todos'],
+    ...productTypes,
+  ]
+    .map(
+      ([id, name]) => `
+        <button
+          class="admin-catalog-tab ${String(id) === activeCatalogType ? 'is-active' : ''}"
+          type="button"
+          data-catalog-type="${id}"
+        >${name}</button>
+      `,
+    )
+    .join('');
+
+  const visibleProducts =
+    activeCatalogType === 'todos'
+      ? products
+      : products.filter((product) => String(product.tipo_calzado_id) === activeCatalogType);
+
+  inventoryList.innerHTML = visibleProducts
     .map(
       (product) => `
         <article class="inventory-item" data-product-id="${product.id}">
           <div class="inventory-thumb">
             ${
               product.imagen_url
-                ? `<img src="${product.imagen_url}" alt="${product.nombre}" loading="lazy" />`
+                ? `<img class="inventory-primary-image" src="${product.imagen_url}" alt="${product.nombre}" loading="lazy" />
+                  ${
+                    product.imagen_hover_url
+                      ? `<img class="inventory-hover-image" src="${product.imagen_hover_url}" alt="Segunda vista de ${product.nombre}" loading="lazy" />`
+                      : ''
+                  }`
                 : '<span></span>'
             }
           </div>
-          <div>
+          <div class="inventory-copy">
             <strong>${product.nombre}</strong>
             <p>${product.tipos_calzado?.nombre ?? 'Sin tipo'} · ${product.color ?? 'Sin color'}</p>
             <p>${product.etiqueta ?? 'Producto'} · ${formatPrice(product.precio)}</p>
+            <small>${product.imagen_hover_url ? '2 imagenes cargadas' : product.imagen_url ? '1 imagen cargada' : 'Sin imagen'}</small>
           </div>
           <div class="inventory-actions">
             <span class="status-pill">${product.disponible ? 'Activo' : 'Oculto'}</span>
@@ -150,6 +184,13 @@ const loadProducts = async () => {
     )
     .join('') || '<p class="empty-state">Todavia no hay productos cargados.</p>';
 };
+
+adminCatalogTabs.addEventListener('click', (event) => {
+  const tab = event.target.closest('[data-catalog-type]');
+  if (!tab) return;
+  activeCatalogType = tab.dataset.catalogType;
+  loadProducts().catch((error) => setMessage(productMessage, error.message, 'error'));
+});
 
 const showDashboard = async () => {
   loginForm.hidden = true;
