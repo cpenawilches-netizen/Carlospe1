@@ -88,15 +88,19 @@ const showLogin = () => {
 
 const apiFetch = async (path, options = {}) => {
   const response = await fetch(`${supabaseUrl}${path}`, options);
+  const text = await response.text();
 
   if (!response.ok) {
-    const text = await response.text();
     throw new Error(text || 'Solicitud rechazada por Supabase');
   }
 
-  if (response.status === 204) return null;
+  if (!text) return null;
 
-  return response.json();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
 };
 
 const loadTypes = async () => {
